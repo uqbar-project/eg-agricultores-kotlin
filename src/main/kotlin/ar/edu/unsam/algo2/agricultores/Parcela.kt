@@ -74,7 +74,7 @@ class Sorgo : Cultivo {
 
 class Parcela {
     var cultivo: Cultivo = Soja()
-    val tamanio = 500
-    val cantidadCultivada = 100
+    var tamanio = 500
+    var cantidadCultivada = 100
 }
 

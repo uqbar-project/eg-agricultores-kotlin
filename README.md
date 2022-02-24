@@ -1,7 +1,7 @@
 
 # Ejercicio de Diseño - Agricultores
 
-[![build](https://github.com/uqbar-project/eg-agricultores-kotlin/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/uqbar-project/eg-microprocesador-kotlin/actions/workflows/build.yml) [![coverage](https://codecov.io/gh/uqbar-project/eg-agricultores-kotlin/graph/badge.svg)](https://codecov.io/gh/uqbar-project/eg-agricultores-kotlin/badge.svg)
+[![build](https://github.com/uqbar-project/eg-agricultores-kotlin/actions/workflows/build.yml/badge.svg?branch=refactor)](https://github.com/uqbar-project/eg-microprocesador-kotlin/actions/workflows/build.yml) [![codecov](https://codecov.io/gh/uqbar-project/eg-agricultores-kotlin/branch/refactor/graph/badge.svg?token=Cwoprdysxs)](https://codecov.io/gh/uqbar-project/eg-agricultores-kotlin)
 
 ![agricultores](images/agricultores.png)
 

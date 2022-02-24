@@ -7,67 +7,34 @@ interface Cultivo {
 
 open class Soja : Cultivo {
     override fun costo(parcela: Parcela) = 10.0
-    override fun precioVenta(parcela: Parcela): Double {
-        var costo1 = 100.0 // 10 * el costo por hectárea que es 10
-        if (parcela.tamanio > 1000) {
-            costo1 *= 0.9
-        }
-        return costo1
-    }
+    override fun precioVenta(parcela: Parcela) = 10 * costo(parcela) * retencion(parcela)
+    private fun retencion(parcela: Parcela) = if (parcela.esGrande()) 0.9 else 1.0
 }
 
-class SojaTransgenica : Cultivo {
+class SojaTransgenica : Soja() {
     var puedeSufrirMutaciones: Boolean = true
-    override fun costo(parcela: Parcela) = 10.0 // igual que la Soja
-    override fun precioVenta(parcela: Parcela): Double {
-        var costo1 = 100.0 // 10 * el costo por hectárea que es 10
-        if (parcela.tamanio > 1000) {
-            costo1 *= 0.9
-        }
-        if (puedeSufrirMutaciones) {
-            costo1 = costo1 / 2
-        }
-        return costo1
-    }
-
+    override fun precioVenta(parcela: Parcela) = ajustePorMutacion() * super.precioVenta(parcela)
+    private fun ajustePorMutacion() = if (puedeSufrirMutaciones) 0.5 else 1.0
 }
 
 class Trigo : Cultivo {
     val conservantes = mutableListOf<Conservante>()
-    var costoConservantes = 0.0
 
+    override fun costo(parcela: Parcela) = minOf(parcela.tamanio * 5.0, 500.0)
     fun agregarConservante(conservante: Conservante) {
         conservantes.add(conservante)
-        var aux = 0.0
-        for (i in 0..conservantes.size - 1) {
-            aux += conservantes[i].costo
-        }
-        costoConservantes = aux
     }
 
-    override fun costo(parcela: Parcela): Double {
-        val costo = parcela.tamanio * 5.0
-        if (costo > 500)
-            return 500.0
-        else
-            return costo
-    }
-
-    override fun precioVenta(parcela: Parcela) = 20 - costoConservantes
+    override fun precioVenta(parcela: Parcela) = 20 - costoConservantes()
+    private fun costoConservantes() = conservantes.sumOf { it.costo }
 }
 
 data class Conservante(val costo: Double = 1.0)
 
 class Sorgo : Cultivo {
 
-    override fun costo(parcela: Parcela): Double {
-        var costo = 3.0
-        if (parcela.tamanio >= 50) {
-            costo = 2.0
-        }
-        return costo * parcela.tamanio
-    }
-
+    override fun costo(parcela: Parcela) = parcela.tamanio * costoPorHectarea(parcela)
+    private fun costoPorHectarea(parcela: Parcela) = if (parcela.esChica()) 3.0 else 2.0
 
     override fun precioVenta(parcela: Parcela) = 20.0
 }
@@ -76,5 +43,9 @@ class Parcela {
     var cultivo: Cultivo = Soja()
     var tamanio = 500
     var cantidadCultivada = 100
+
+    fun esGrande() = tamanio > 1000
+    fun esChica() = tamanio < 50
+    fun subutilizada() = tamanio > cantidadCultivada * 2
 }
 

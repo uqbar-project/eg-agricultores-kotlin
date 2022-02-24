@@ -7,24 +7,7 @@ class Agricultor {
         parcelas.add(parcela)
     }
 
-    fun cultivos(): List<String> {
-        val cultivos = mutableListOf<String>()
-        for (parcela in parcelas) {
-            val nombreCultivo = parcela.cultivo.javaClass.name
-            if (!cultivos.contains(nombreCultivo)) {
-                cultivos.add(nombreCultivo)
-            }
-        }
-        return cultivos
-    }
+    fun cultivos() = parcelas.map { it.cultivo.javaClass.name }.distinct()
 
-    fun algunaParcelaSubutilizada(): Boolean {
-        var subutilizada = false
-        for (parcela in parcelas) {
-            if (parcela.tamanio > parcela.cantidadCultivada * 2) {
-                subutilizada = true
-            }
-        }
-        return subutilizada
-    }
+    fun algunaParcelaSubutilizada() = parcelas.any { it.subutilizada() }
 }

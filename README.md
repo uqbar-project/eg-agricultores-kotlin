@@ -77,7 +77,7 @@ Se pide codificar:
 
 ```kt
 override fun precioVenta(parcela: Parcela) = 10 * costo(parcela) * retencion(parcela)
-private fun retencion(parcela: Parcela) = if (parcela.grande()) 0.9 else 1.0
+private fun retencion(parcela: Parcela) = if (parcela.esGrande()) 0.9 else 1.0
 ```
 
 ### Soja Transgenica
@@ -127,19 +127,10 @@ class Trigo : Cultivo {
 - respecto al costo, hay un uso de variables locales innecesarias, el código es muy **imperativo** (tiene bastante control del flujo), fíjense esta otra variante
 
 ```kt
-    override fun costo(parcela: Parcela) = maxOf(parcela.tamanio * 5.0, 500.0)
+    override fun costo(parcela: Parcela) = minOf(parcela.tamanio * 5.0, 500.0)
 ```
 
-es más directa y delega el control en la función `maxOf` de Kotlin.
-
-Originalmente incluso lo había implementado
-
-```kt
-for (i in 1..conservantes.size) {
-    ...
-```
-
-lo cual en el test tiraba un `Index out of bounds`. Esto no nos pasa nunca si enviamos el mensaje `maxOf` (está encapsulado).
+es más directa y delega el control en la función `minOf` de Kotlin.
 
 - por otra parte vemos el bad smell **temporary variable**: el costo de los conservantes es un valor calculable, no hay necesidad de pre-calcularlo, asumiendo que la colección de conservantes es acotada y no hay costo computacional en resolver el costo.
 - el método `agregarConservante` tiene dos responsabilidades: agregar un conservante a la lista **y** recalcular el costo de los conservantes, por lo tanto tiene baja cohesión
@@ -154,6 +145,15 @@ lo cual en el test tiraba un `Index out of bounds`. Esto no nos pasa nunca si en
     override fun precioVenta(parcela: Parcela) = 20 - costoConservantes()
     private fun costoConservantes() = conservantes.sumOf { it.costo }
 ```
+
+Originalmente la implementación de la suma de conservantes había sido:
+
+```kt
+for (i in 1..conservantes.size) {
+    ...
+```
+
+lo cual en el test tiraba un `Index out of bounds` (porque las listas comienzan a partir de 0). Esto no nos pasa nunca si enviamos el mensaje `sumOf` (está encapsulado).
 
 ### Sorgo
 
@@ -241,7 +241,7 @@ class Parcela { ...
 Ahora que tenemos esa responsabilidad en Parcela, en Agricultor solo debemos hacer:
 
 ```kt
-fun algunaParcelaSubutilizada2() = parcelas.any { it.subutilizada() }
+fun algunaParcelaSubutilizada() = parcelas.any { it.subutilizada() }
 ```
 
 El lector podrá apreciar que al escribir código **declarativo**, tenemos menos chances de cometer errores (podemos equivocarnos en el mensaje que enviamos a la parcela, pero es más fácil de identificar).

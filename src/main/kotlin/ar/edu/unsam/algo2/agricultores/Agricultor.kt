@@ -3,12 +3,17 @@ package ar.edu.unsam.algo2.agricultores
 class Agricultor {
     val parcelas = mutableListOf<Parcela>()
 
-    fun cultivos(): List<Cultivo> {
-        val cultivos = mutableListOf<Cultivo>()
+    fun agregarParcela(parcela: Parcela) {
+        parcelas.add(parcela)
+    }
+
+    fun cultivos(): List<String> {
+        val cultivos = mutableListOf<String>()
         for (parcela in parcelas) {
-           if (!cultivos.contains(parcela.cultivo)) {
-               cultivos.add(parcela.cultivo)
-           }
+            val nombreCultivo = parcela.cultivo.javaClass.name
+            if (!cultivos.contains(nombreCultivo)) {
+                cultivos.add(nombreCultivo)
+            }
         }
         return cultivos
     }

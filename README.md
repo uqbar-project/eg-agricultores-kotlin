@@ -191,12 +191,13 @@ En el método que calcula los cultivos de un agricultor nuevamente tenemos códi
 class Agricultor {
     val parcelas = mutableListOf<Parcela>()
 
-    fun cultivos(): List<Cultivo> {
-        val cultivos = mutableListOf<Cultivo>()
+    fun cultivos(): List<String> {
+        val cultivos = mutableListOf<String>()
         for (parcela in parcelas) {
-           if (!cultivos.contains(parcela.cultivo)) {
-               cultivos.add(parcela.cultivo)
-           }
+            val nombreCultivo = parcela.cultivo.javaClass.name
+            if (!cultivos.contains(nombreCultivo)) {
+                cultivos.add(nombreCultivo)
+            }
         }
         return cultivos
     }
@@ -206,7 +207,7 @@ class Agricultor {
 En lugar de eso, vamos a obtener los cultivos de cada parcela, con duplicados, mediante el mensaje `map` y luego `distinct` para eliminar los duplicados:
 
 ```kt
-fun cultivos() = parcelas.map { it.cultivo }.distinct()
+fun cultivos() = parcelas.map { it.cultivo.javaClass.name }.distinct()
 ```
 
 Escribimos menos porque nuestra escritura es más **declarativa**, menos propensa a errores: tenemos menos control sobre el algoritmo (no sabemos de qué manera va a filtrar los elementos ni cómo lo resuelve distinct, pero no nos importa).

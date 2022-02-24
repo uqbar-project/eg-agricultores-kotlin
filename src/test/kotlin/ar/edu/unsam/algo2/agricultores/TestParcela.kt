@@ -36,9 +36,11 @@ class TestCultivos : DescribeSpec({
             sojaTransgenica.precioVenta(parcela) shouldBe 50
         }
         it("su precio de venta para una parcela es la misma que la soja si no sufre mutaciones") {
-            val parcelaChica = Parcela()
+            val parcela = Parcela().apply {
+                tamanio = 2000
+            }
             sojaTransgenica.puedeSufrirMutaciones = false
-            sojaTransgenica.precioVenta(parcelaChica) shouldBe 100
+            sojaTransgenica.precioVenta(parcela) shouldBe 90
         }
     }
 
@@ -54,7 +56,11 @@ class TestCultivos : DescribeSpec({
             val parcela = Parcela()
             trigo.costo(parcela) shouldBe 500
         }
-        it("su precio de venta para una parcela está en función de sus conservantes") {
+        it("su precio de venta para una parcela sin conservantes es un valor fijo") {
+            val parcela = Parcela()
+            trigo.precioVenta(parcela) shouldBe 20
+        }
+        it("su precio de venta para una parcela es afectado por sus conservantes") {
             val parcela = Parcela()
             trigo.agregarConservante(Conservante(4.0))
             trigo.agregarConservante(Conservante(3.0))

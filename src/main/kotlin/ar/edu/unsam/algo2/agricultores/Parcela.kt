@@ -39,7 +39,7 @@ class Trigo : Cultivo {
     fun agregarConservante(conservante: Conservante) {
         conservantes.add(conservante)
         var aux = 0.0
-        for (i in 1..conservantes.size) {
+        for (i in 0..conservantes.size - 1) {
             aux += conservantes[i].costo
         }
         costoConservantes = aux

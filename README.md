@@ -106,7 +106,7 @@ class Trigo : Cultivo {
     fun agregarConservante(conservante: Conservante) {
         conservantes.add(conservante)
         var aux = 0.0
-        for (i in 1..conservantes.size) {
+        for (i in 0..conservantes.size - 1) {
             aux += conservantes[i].costo
         }
         costoConservantes = aux
@@ -130,7 +130,16 @@ class Trigo : Cultivo {
     override fun costo(parcela: Parcela) = maxOf(parcela.tamanio * 5.0, 500.0)
 ```
 
-es más directa y delega el control en la función `maxOf` de Kotlin
+es más directa y delega el control en la función `maxOf` de Kotlin.
+
+Originalmente incluso lo había implementado
+
+```kt
+for (i in 1..conservantes.size) {
+    ...
+```
+
+lo cual en el test tiraba un `Index out of bounds`. Esto no nos pasa nunca si enviamos el mensaje `maxOf` (está encapsulado).
 
 - por otra parte vemos el bad smell **temporary variable**: el costo de los conservantes es un valor calculable, no hay necesidad de pre-calcularlo, asumiendo que la colección de conservantes es acotada y no hay costo computacional en resolver el costo.
 - el método `agregarConservante` tiene dos responsabilidades: agregar un conservante a la lista **y** recalcular el costo de los conservantes, por lo tanto tiene baja cohesión

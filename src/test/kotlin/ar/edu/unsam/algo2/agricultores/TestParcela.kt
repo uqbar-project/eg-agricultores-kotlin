@@ -54,7 +54,7 @@ class TestCultivos : DescribeSpec({
             val parcela = Parcela()
             trigo.costo(parcela) shouldBe 500
         }
-        it("el precio de venta para una parcela está en función de sus conservantes") {
+        it("su precio de venta para una parcela está en función de sus conservantes") {
             val parcela = Parcela()
             trigo.agregarConservante(Conservante(4.0))
             trigo.agregarConservante(Conservante(3.0))
@@ -62,4 +62,21 @@ class TestCultivos : DescribeSpec({
         }
     }
 
+    describe("tests de sorgo") {
+        val trigo = Sorgo()
+        it("su costo si la parcela es chica multiplica por un valor mayor") {
+            val parcela = Parcela().apply {
+                tamanio = 20
+            }
+            trigo.costo(parcela) shouldBe 60
+        }
+        it("su costo si la parcela es grande multiplica por un valor menor") {
+            val parcela = Parcela()
+            trigo.costo(parcela) shouldBe 1000
+        }
+        it("su precio de venta es fijo") {
+            val parcela = Parcela()
+            trigo.precioVenta(parcela) shouldBe 20
+        }
+    }
 })
